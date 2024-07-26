@@ -7,5 +7,5 @@ Refer newrelic docs for [monitoring-aws-lambda-layerles](https://docs.newrelic.c
 ```
 cd python/original_handler/newrelic_example_python/ 
 pip install -t . newrelic
-
+./deploy.sh <NRAccountId> <aws-region<> <NRLicenseKey> <aws-s3-bucket-name>
 ```

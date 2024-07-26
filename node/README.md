@@ -7,5 +7,5 @@ Refer newrelic docs for [monitoring-aws-lambda-layerles](https://docs.newrelic.c
 ```
 cd node/newrelic-example-node
 npm install newrelic --save
-
+./deploy.sh <NRAccountId> <aws-region<> <NRLicenseKey> <aws-s3-bucket-name>
 ```
