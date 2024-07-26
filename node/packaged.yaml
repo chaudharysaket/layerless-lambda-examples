@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: And example of a simple instrumented NodeJS Lambda
+Parameters:
+  NRAccountId:
+    Type: String
+    Description: Your New Relic account ID; necessary for distributed tracing.
+    AllowedPattern: '[0-9]+'
+  NRLicenseKey:
+    Type: String
+    Description: Your New Relic License Key; necessary for telemetry.
+Resources:
+  NewRelicExample:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://nr-test-saket-layers-us-west-2/074a6b11992a84af78e7ac8ed1cce08b
+      Description: A simple Lambda, with New Relic telemetry
+      FunctionName: newrelic-example-nodejs
+      Handler: index.handler
+      Runtime: nodejs18.x
+      PackageType: Zip
+      Environment:
+        Variables:
+          NEW_RELIC_ACCOUNT_ID:
+            Fn::Sub: ${NRAccountId}
+          NEW_RELIC_LICENSE_KEY:
+            Fn::Sub: ${NRLicenseKey}
+          NEW_RELIC_EXTENSION_SEND_FUNCTION_LOGS: true
+          NEW_RELIC_SERVERLESS_MODE_ENABLED: true
+          NEW_RELIC_EXTENSION_LOG_LEVEL: DEBUG
+          NEW_RELIC_TELEMETRY_ENDPOINT: https://staging-cloud-collector.newrelic.com/aws/lambda/v1
+          NEW_RELIC_LOG_ENDPOINT: https://staging-log-api.newrelic.com/log/v1
+      Layers:
+      - Fn::Sub: arn:${AWS::Partition}:lambda:${AWS::Region}:451483290750:layer:NewRelicLambdaExtension:40
+      Policies:
+      - AWSSecretsManagerGetSecretValuePolicy:
+          SecretArn:
+            Fn::ImportValue: NewRelicLicenseKeySecret-NewRelic-LicenseKeySecretARN
+    Metadata:
+      SamResourceId: NewRelicExample
+  Logs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+        Fn::Join:
+        - ''
+        - - /aws/lambda/
+          - Ref: NewRelicExample
+      RetentionInDays: 7
+    Metadata:
+      SamResourceId: Logs
