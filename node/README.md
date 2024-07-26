@@ -1,5 +1,5 @@
 # layerless-lambda-examples
-Layerless approach to instrument Python lambda
+Layerless approach to instrument NodeJS lambda
 Refer newrelic docs for [monitoring-aws-lambda-layerles](https://docs.newrelic.com/docs/serverless-function-monitoring/aws-lambda-monitoring/instrument-lambda-function/enable-serverless-monitoring-aws-lambda-layerless/#node)
 
 ## Install instructions
